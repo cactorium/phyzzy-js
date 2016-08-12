@@ -6,8 +6,8 @@ const Mass = require('./phyzzy/components/mass.js')
 const Spring = require('./phyzzy/components/spring.js')
 
 const Construct = (mouse, phyzzy) => {
-    const mCount, sCount
-
+    const mCount
+    
     return mCount
 }
 
