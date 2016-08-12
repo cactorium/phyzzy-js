@@ -5,37 +5,57 @@
 const Mass = require('./phyzzy/components/mass.js')
 const Spring = require('./phyzzy/components/spring.js')
 
-const mProps = () => ({mass: 0.1, rad: 0.05, refl: 0.8, mu_k: 0.4, mu_s: 0.0})
-
-let wasDown = false // tracks mouse button from last frame
-
 const MassMaker = state => ({
-    buildMass: phyzzy => {
-        return 0
+    buildMass: (phyzzy, mouse) => {
+
+        if (state.enabled && mouse.isDown() && !state.wasDown) {
+            if (!mouse.actionOn().hov) {
+                state.wasDown = true
+
+                console.log('adding mass', mouse.coord())
+
+                phyzzy.addM(Mass(state.mProp, mouse.coord(), mouse.coord()))
+
+            }
+        }
+
+        if (!mouse.isDown() && state.wasDown) {
+            state.wasDown = false
+        }
     }
 })
 const SpringMaker = state => ({
-    buildSpring: (phyzzy, ctx) => {
+    buildSpring: (phyzzy, mouse, ctx) => {
 
     }
 })
 
 const ModeSetter = state => ({
-    enable: active => state.enabled = false
+    enableSet: active => state.enabled = active
 })
 
-const MeshBuilder = (mouse) => {
+const ComponentPropertySetter = state => ({
+    massPropSet: (mass, rad, refl, mu_s, mu_k) => state.mProp = {mass, rad, refl, mu_s, mu_k}
+})
+
+const Outputs = state => ({
+    isEnabled: () => state.enabled
+})
+
+const MeshBuilder = () => {
     const state = {
-        mouse,
         enabled: false,
-        lastLink: undefined
+        lastLink: undefined,
+        wasDown: false,
+        mProp: undefined
     }
     return Object.assign(
         {},
         MassMaker(state),
         MassMaker(state),
         SpringMaker(state),
-        ModeSetter(state)
+        ModeSetter(state),
+        ComponentPropertySetter(state)
     )
 }
 
