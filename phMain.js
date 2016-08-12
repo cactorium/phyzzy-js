@@ -57,8 +57,6 @@ const frame = (frameTime) => {
     ph.drawMass(ctx, '#1DB322')
     mouse.hover(ph, ctx, '#1DB322')
     mouse.select(ctx)
-    Construct(ph, mouse, true)
-    
     ph.verlet(
         ph.m.map(mass => {
             let f = env.weight(mass)

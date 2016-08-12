@@ -9,21 +9,34 @@ const mProps = () => ({mass: 0.1, rad: 0.05, refl: 0.8, mu_k: 0.4, mu_s: 0.0})
 
 let wasDown = false // tracks mouse button from last frame
 
-const Construct = (phyzzy, mouse, enable) => {
-    let linkfrom = undefined
-    let massCount = 0
-    if (mouse.isDown() && !wasDown) {
-        wasDown = true
-        if (enable && !mouse.actionOn().hov) {
-            massCount = phyzzy.addM(Mass(
-                mProps(),
-                mouse.coord(),
-                mouse.coord()
-            ))
-        }
-    } else if (!mouse.isDown() && wasDown) {
-            wasDown = false
+const MassMaker = state => ({
+    buildMass: phyzzy => {
+        return 0
     }
+})
+const SpringMaker = state => ({
+    buildSpring: (phyzzy, ctx) => {
+
+    }
+})
+
+const ModeSetter = state => ({
+    enable: active => state.enabled = false
+})
+
+const MeshBuilder = (mouse) => {
+    const state = {
+        mouse,
+        enabled: false,
+        lastLink: undefined
+    }
+    return Object.assign(
+        {},
+        MassMaker(state),
+        MassMaker(state),
+        SpringMaker(state),
+        ModeSetter(state)
+    )
 }
 
-module.exports = Construct
+module.exports = MeshBuilder
