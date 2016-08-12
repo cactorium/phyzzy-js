@@ -17,7 +17,7 @@ const AddToMesh = state => ({
             // cannot link a mass to itself nor have two springs in link
             mass1.branch.push({m: mass2, s: spring})
             mass2.branch.push({m: mass1, s: spring})
-        } else console.log('spring not added')
+        }
     }
 })
 

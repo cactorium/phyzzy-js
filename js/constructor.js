@@ -11,11 +11,7 @@ const MassMaker = state => ({
         if (state.enabled && mouse.isDown() && !state.wasDown) {
             if (!mouse.actionOn().hov) {
                 state.wasDown = true
-
-                console.log('adding mass', mouse.coord())
-
                 phyzzy.addM(Mass(state.mProp, mouse.coord(), mouse.coord()))
-
             }
         }
 
