@@ -82,31 +82,32 @@ const Initializer = state => ({
         canvas.onmousemove = e => {
             // actions when mouse moves in the canvas
             const b = canvas.getBoundingClientRect()
+            state.coord_prv.equ(state.coord)
             state.coord.equ({
                 x: e.clientX - b.left,
                 y: e.clientY - b.top
             })
 
-            state.hov = phyzzy.m.find(
-                m => m.Pi.compare(
-                    state.coord.div(state.scale),
-                    m.rad + padding / state.scale
-                )
-            )
+            state.hov = phyzzy.m.find(m => m.Pi.compare(
+                state.coord.div(state.scale), m.rad + padding / state.scale
+            ))
         }
 
     }
 })
 
 const Output = state => ({
-    coord: scale => state.coord.div(scale || state.scale).toFixed2d(2),
-    isDown: () => state.mousedown
+    coord: scale => state.coord.div(scale || state.scale),
+    vel: scale => state.coord.sub(state.coord_prv),
+    isDown: () => state.mousedown,
+    actionOn: () => ({hov: state.hov, sel: state.sel, drg: state.drg})
 })
 
 const Mouser = scale => {
     const state = {
-        coord: new Vect(0, 0),
         scale,
+        coord: new Vect(0, 0),
+        coord_prv: new Vect(0, 0),
         mousedown: false,
         hov: undefined,
         sel: undefined,

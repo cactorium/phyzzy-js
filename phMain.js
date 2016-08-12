@@ -5,7 +5,7 @@ const Mass = require('./js/phyzzy/components/mass.js')
 const Spring = require('./js/phyzzy/components/spring.js')
 const Environment = require('./js/phyzzy/components/environment.js')
 const User = require('./js/user.js')
-
+const Construct = require('./js/constructor.js')
 
 const viewport = document.getElementById('viewport')
 const ctx = viewport.getContext('2d')
@@ -13,10 +13,12 @@ let delta = 1 / 50 // step time
 
 const ph = Phyzzy(100)
 const env = Environment(
-    {x: 0, y: 9.81},
+    {x: 0, y: 0},
     0,
     {x: 0, y: 0, w: viewport.width / ph.scale, h: viewport.height / ph.scale}
 )
+
+/*
 const m1 = Mass(
         {mass: 0.1, rad: 0.05, refl: 0.75, mu_s: 0.0, mu_k: 0.2},
         {x: viewport.width / 2 / ph.scale, y: 0.05},
@@ -42,7 +44,7 @@ ph.addM(m3)
 ph.addS(m1, m2, s1)
 ph.addS(m2, m3, s2)
 ph.addS(m3, m1, s3)
-
+*/
 
 const mouse = User.Mouser(ph.scale)
 
@@ -55,6 +57,7 @@ const frame = (frameTime) => {
     ph.drawMass(ctx, '#1DB322')
     mouse.hover(ph, ctx, '#1DB322')
     mouse.select(ctx)
+    Construct(ph, mouse, true)
     
     ph.verlet(
         ph.m.map(mass => {
@@ -64,7 +67,7 @@ const frame = (frameTime) => {
             .sum(mass.damping())
             return f.sum(env.friction(mass, f))
     }), delta)
-    ph.collision(ph.m.map(mass => env.boundaryHit(mass) ))
+    ph.collision(ph.m.map(mass => env.boundaryHit(mass)))
 
     mouse.dragMass()
 
